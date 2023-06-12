@@ -14,16 +14,16 @@ import java.util.Arrays;
 @Component
 public class ChatGptUtils {
 
-    @Value("chatgpt.sk")
-    private static String sk;
+    @Value("${chatgpt.sk}")
+    private String sk;
 
-    public static  String  send(String message1){
+    public   String  send(String message1){
 //        Proxy proxy = Proxys.http("127.0.0.1", 1080);
         ChatGPT chatGPT = ChatGPT.builder()
             .apiKey(sk)
 //            .proxy(proxy)
             .timeout(900)
-//            .apiHost("https://api.openai.com/") //反向代理地址
+            .apiHost("https://api.openai.com/") //反向代理地址
             .build()
             .init();
 

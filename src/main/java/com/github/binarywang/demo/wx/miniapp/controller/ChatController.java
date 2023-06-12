@@ -27,10 +27,13 @@ import java.util.logging.Handler;
 public class ChatController {
     @Resource
     private ChatService chatService;
+
+    @Resource
+    private  ChatGptUtils chatGptUtils;
     @GetMapping("/chat")
     public void getMedia() {
 
         List<ChatEntity> re= chatService.getChatByUserId(10);
-        ChatGptUtils.send("11");
+        chatGptUtils.send("11");
     }
 }
