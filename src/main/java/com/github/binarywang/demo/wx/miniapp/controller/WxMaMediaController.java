@@ -35,6 +35,7 @@ import java.util.List;
 public class WxMaMediaController {
     private final WxMaService wxMaService;
 
+
     /**
      * 上传临时素材
      *
