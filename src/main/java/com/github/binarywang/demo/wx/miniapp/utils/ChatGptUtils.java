@@ -9,7 +9,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.net.Proxy;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 public class ChatGptUtils {
@@ -17,7 +19,7 @@ public class ChatGptUtils {
     @Value("${chatgpt.sk}")
     private String sk;
 
-    public   String  send(String message1){
+    public   String  send(String msg, List<Message> history){
 //        Proxy proxy = Proxys.http("127.0.0.1", 1080);
         ChatGPT chatGPT = ChatGPT.builder()
             .apiKey(sk)
@@ -27,19 +29,21 @@ public class ChatGptUtils {
             .build()
             .init();
 
-        Message system = Message.ofSystem("你现在是一个诗人，专门写七言绝句");
-        Message message = Message.of("写一段七言绝句诗，题目是：火锅！");
-
+        Message system = Message.ofSystem("你现在是一位专业的高考志愿填报指导教师,你可以根据我的高考得分和排名以及每个学校历年录取的分数情况，然后再问我10个关于志愿填写的问题之后帮我推荐最符合我的十个学校并给出推荐理由及录取的难度,但问题要在我回复完一个后再问下一个，如果没有合适的大学适合我，需要用温柔的话鼓励我，我的高考得分450分，在北京市理科排名100名，现在你开始问我问题吧");
+        Message message = Message.of(msg);
+        List<Message> messages = new ArrayList<>();
+        messages.add(system);
+        messages.addAll(history);
+        messages.add(message);
         ChatCompletion chatCompletion = ChatCompletion.builder()
             .model(ChatCompletion.Model.GPT_3_5_TURBO.getName())
-            .messages(Arrays.asList(system, message))
-            .maxTokens(3000)
+            .messages(messages)
+            .maxTokens(4000)
             .temperature(0.9)
             .build();
         ChatCompletionResponse response = chatGPT.chatCompletion(chatCompletion);
         Message res = response.getChoices().get(0).getMessage();
-        System.out.println(res);
-        return "";
+        return res.getContent();
     }
 
 
