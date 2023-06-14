@@ -41,14 +41,15 @@ public class UserServiceImpl extends ServiceImpl<UserDao, WxUserEntity> implemen
             + wxUser.getCode()
             + "&grant_type=authorization_code";
     String response = httpClient.sendHttpsGet(request);
-    JSONObject jsonObject = JSON.parseObject(response);
-    int errCode = jsonObject.getIntValue("errcode");
+    JSONObject result = JSON.parseObject(response);
+    int errCode = result.getIntValue("errcode");
     if (errCode != 0) {
-      throw new SystemException(errCode, jsonObject.getString("errmsg"));
+      throw new SystemException(errCode, result.getString("errmsg"));
     }
-    WxUserEntity wxUserEntity =
-        getOne(new QueryWrapper<>(new WxUserEntity().setOpenid(wxUser.getOpenid())));
+    String openid = result.getString("openid");
+    WxUserEntity wxUserEntity = getOne(new QueryWrapper<>(new WxUserEntity().setOpenid(openid)));
     if (null == wxUserEntity) {
+      wxUser.setOpenid(openid);
       wxUser.setRegisterDate(new Date());
       wxUser.setLastLoginDate(new Date());
       save(wxUser);
@@ -58,6 +59,6 @@ public class UserServiceImpl extends ServiceImpl<UserDao, WxUserEntity> implemen
       wxUserEntity.setLastLoginDate(new Date());
       updateById(wxUserEntity);
     }
-    return JwtUtil.generateToken(wxUser.getOpenid(), wxUser.getNickName(), WxUserConstant.Jwt_Ttl);
+    return JwtUtil.generateToken(openid, wxUser.getNickName(), WxUserConstant.Jwt_Ttl);
   }
 }
