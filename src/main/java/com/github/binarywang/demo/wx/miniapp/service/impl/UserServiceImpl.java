@@ -61,4 +61,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, WxUserEntity> implemen
     }
     return JwtUtil.generateToken(openid, wxUser.getNickName(), WxUserConstant.Jwt_Ttl);
   }
+
+  @Override
+  public WxUserEntity queryById(int id) {
+    return getOne(new QueryWrapper<>(new WxUserEntity().setId(id)));
+  }
 }

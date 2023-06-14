@@ -1,5 +1,6 @@
 package com.github.binarywang.demo.wx.miniapp.interceptor;
 
+import com.github.binarywang.demo.wx.miniapp.constant.ErrorEnum;
 import com.github.binarywang.demo.wx.miniapp.exception.SystemException;
 import com.github.binarywang.demo.wx.miniapp.utils.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -19,11 +20,11 @@ public class JwtInterceptor implements HandlerInterceptor {
     if (handler instanceof HandlerMethod) {
       String token = request.getHeader("token");
       if (Strings.isEmpty(token)) {
-        throw new SystemException(401, "no token");
+        throw SystemException.buildSystemException(ErrorEnum.NoToken);
       } else {
         Claims claims = JwtUtil.validateToken(token).getClaims();
         if (claims == null) {
-          throw new SystemException(401, "access denied");
+          throw SystemException.buildSystemException(ErrorEnum.NoAccess);
         } else {
           return true;
         }
