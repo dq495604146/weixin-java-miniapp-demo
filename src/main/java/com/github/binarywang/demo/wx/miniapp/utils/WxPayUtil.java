@@ -1,6 +1,7 @@
 package com.github.binarywang.demo.wx.miniapp.utils;
 
-import com.wechat.pay.java.core.RSAConfig;
+import com.wechat.pay.java.core.Config;
+import com.wechat.pay.java.core.RSAAutoCertificateConfig;
 import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
 import javax.annotation.PostConstruct;
 import lombok.Getter;
@@ -19,21 +20,22 @@ public class WxPayUtil {
   @Value("${wx.miniapp.merchantSerialNumber}")
   public String merchantSerialNumber;
 
-  @Value("${wx.miniapp.wechatPayCertificatePath}")
-  public String wechatPayCertificatePath;
+  @Value("${wx.miniapp.apiV3key}")
+  public String apiV3key;
 
-  @Getter public JsapiServiceExtension jsapiServiceExtension;
+  @Getter private Config config;
+
+  @Getter private JsapiServiceExtension jsapiServiceExtension;
 
   @PostConstruct
   public void init() {
     // 初始化商户配置
-    RSAConfig config =
-        new RSAConfig.Builder()
+    config =
+        new RSAAutoCertificateConfig.Builder()
             .merchantId(merchantId)
-            // 使用 com.wechat.pay.java.core.util 中的函数从本地文件中加载商户私钥，商户私钥会用来生成请求的签名
             .privateKeyFromPath(privateKeyPath)
             .merchantSerialNumber(merchantSerialNumber)
-            .wechatPayCertificatesFromPath(wechatPayCertificatePath)
+            .apiV3Key(apiV3key)
             .build();
     // 初始化服务
     jsapiServiceExtension =

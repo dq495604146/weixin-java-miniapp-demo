@@ -18,7 +18,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    String[] patterns = new String[] {"/user/login"};
-    registry.addInterceptor(jwtInterceptor()).addPathPatterns("/**").excludePathPatterns(patterns);
+    String[] patterns = new String[] {"/user/login", "/error"};
+    registry.addInterceptor(jwtInterceptor()).excludePathPatterns(patterns);
   }
 }
