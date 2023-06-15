@@ -1,7 +1,9 @@
 package com.github.binarywang.demo.wx.miniapp.controller;
 
 import com.github.binarywang.demo.wx.miniapp.entity.OrderEntity;
+import com.github.binarywang.demo.wx.miniapp.entity.WxUserEntity;
 import com.github.binarywang.demo.wx.miniapp.service.OrderService;
+import com.github.binarywang.demo.wx.miniapp.service.UserService;
 import com.github.binarywang.demo.wx.miniapp.utils.WxPayUtil;
 import com.wechat.pay.java.core.notification.NotificationConfig;
 import com.wechat.pay.java.core.notification.NotificationParser;
@@ -24,6 +26,8 @@ public class WxPayController {
 
   @Resource OrderService orderService;
 
+  @Resource UserService userService;
+
   @PostMapping("/notify")
   public Map<String, String> payNotify(
       @RequestHeader(value = "Wechatpay-Serial", defaultValue = "") String serialNumber,
@@ -45,7 +49,12 @@ public class WxPayController {
     int state = Transaction.TradeStateEnum.SUCCESS == transaction.getTradeState() ? 1 : 2;
     OrderEntity order = orderService.getOrderByOutTradeNo(outTradeNo);
     orderService.updateOrder(order.setOrderStatus((short) state));
-    // todo 成功后需要在用户表标记一下vip状态
+    if (state == 1) {
+      WxUserEntity wxUserEntity = new WxUserEntity();
+      wxUserEntity.setId(order.getUserId());
+      wxUserEntity.setProductFlag(order.getProductFlag());
+      userService.updateWxUserEntity(wxUserEntity);
+    }
     return new HashMap<>();
   }
 }

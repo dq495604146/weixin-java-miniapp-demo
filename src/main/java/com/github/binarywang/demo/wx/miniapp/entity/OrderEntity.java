@@ -17,4 +17,5 @@ public class OrderEntity {
   private short orderStatus;
   private String outTradeNo;
   private String description;
+  private short productFlag;
 }
