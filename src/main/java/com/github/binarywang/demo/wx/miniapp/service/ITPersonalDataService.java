@@ -12,5 +12,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @since 2023-06-14
  */
 public interface ITPersonalDataService extends IService<TPersonalData> {
-
+    public TPersonalData saveTPersonalData(TPersonalData tPersonalData);
 }

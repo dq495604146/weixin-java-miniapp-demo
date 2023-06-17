@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.binarywang.demo.wx.miniapp.dto.ResponseDTO;
 import com.github.binarywang.demo.wx.miniapp.entity.Province;
 import com.github.binarywang.demo.wx.miniapp.service.IProvinceService;
+import com.github.binarywang.demo.wx.miniapp.vo.ProvinceVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,6 +40,15 @@ public class ProvinceController {
         List<Province> list=provinceService.list(qw);
         return ResponseDTO.success(list);
 
+    }
+
+    /**
+     * 获取所有省份直辖市（包含城市信息）
+     * @return
+     */
+    @GetMapping("/getAllProvinceIncludeCity")
+    public ResponseDTO<List<ProvinceVO>> getAllProvinceIncludeCity(){
+        return ResponseDTO.success(provinceService.getAllProvinceIncludeCity());
     }
 }
 

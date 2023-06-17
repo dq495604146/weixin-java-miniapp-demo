@@ -25,5 +25,7 @@ public class Province implements Serializable {
 
     private String provinceName;
 
+    private int hot;
+
 
 }
