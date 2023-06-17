@@ -1,5 +1,6 @@
 package com.github.binarywang.demo.wx.miniapp.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.binarywang.demo.wx.miniapp.dao.OrderDao;
 import com.github.binarywang.demo.wx.miniapp.entity.OrderEntity;
@@ -16,5 +17,10 @@ public class OrderServiceImpl extends ServiceImpl<OrderDao, OrderEntity> impleme
   @Override
   public void updateOrder(OrderEntity orderEntity) {
     updateById(orderEntity);
+  }
+
+  @Override
+  public OrderEntity getOrderByOutTradeNo(String outTradeNo) {
+    return getOne(new QueryWrapper<>(new OrderEntity().setOutTradeNo(outTradeNo)));
   }
 }

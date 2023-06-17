@@ -7,4 +7,6 @@ public interface UserService {
   String login(WxUserEntity wxUser) throws SystemException;
 
   WxUserEntity queryById(int id);
+
+  void updateWxUserEntity(WxUserEntity wxUserEntity);
 }

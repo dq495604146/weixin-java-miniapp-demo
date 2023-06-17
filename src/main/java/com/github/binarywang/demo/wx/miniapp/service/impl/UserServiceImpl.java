@@ -66,4 +66,9 @@ public class UserServiceImpl extends ServiceImpl<UserDao, WxUserEntity> implemen
   public WxUserEntity queryById(int id) {
     return getOne(new QueryWrapper<>(new WxUserEntity().setId(id)));
   }
+
+  @Override
+  public void updateWxUserEntity(WxUserEntity wxUserEntity) {
+    updateById(wxUserEntity);
+  }
 }

@@ -9,6 +9,7 @@ import javax.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,5 +28,10 @@ public class UserController {
     Map<String, String> map = new HashMap<>();
     map.put("token", token);
     return map;
+  }
+
+  @GetMapping("/{id}")
+  public WxUserEntity getUser(@PathVariable int id) {
+    return userService.queryById(id);
   }
 }

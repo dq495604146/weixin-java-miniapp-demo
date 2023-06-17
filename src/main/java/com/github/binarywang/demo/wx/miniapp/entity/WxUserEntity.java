@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-@TableName("t_wxuserinfo")
+@TableName("t_wx_user")
 public class WxUserEntity {
   private Integer id;
 
@@ -21,6 +21,8 @@ public class WxUserEntity {
   private Date registerDate;
 
   private Date lastLoginDate;
+
+  private short productFlag;
 
   @TableField(select = false, exist = false)
   private String code;

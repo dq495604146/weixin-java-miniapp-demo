@@ -6,4 +6,6 @@ public interface OrderService {
   void createOrder(OrderEntity orderEntity);
 
   void updateOrder(OrderEntity orderEntity);
+
+  OrderEntity getOrderByOutTradeNo(String outTradeNo);
 }
