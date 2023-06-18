@@ -36,6 +36,7 @@ public class ProvinceServiceImpl extends ServiceImpl<ProvinceDao, Province> impl
             provinceVO.setProvinceId(province.getProvinceId());
             provinceVO.setProvinceName(province.getProvinceName());
             provinceVO.setHot(province.getHot());
+            provinceVO.setGaokaoType(provinceVO.getGaokaoType());
             HashMap<String,Object> map=new HashMap<>();
             map.put("province_id",province.getProvinceId());
             List<City> cities=cityDao.selectByMap(map);

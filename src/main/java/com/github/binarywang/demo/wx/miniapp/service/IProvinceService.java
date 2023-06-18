@@ -21,4 +21,5 @@ public interface IProvinceService extends IService<Province> {
      * @return
      */
     public List<ProvinceVO> getAllProvinceIncludeCity();
+
 }

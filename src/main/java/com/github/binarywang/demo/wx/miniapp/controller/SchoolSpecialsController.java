@@ -38,7 +38,7 @@ public class SchoolSpecialsController {
     public ResponseDTO<List<SchoolSpecials>> getSpecialsList(@PathVariable("schoolId") String schoolId){
         QueryWrapper qw=new QueryWrapper();
         qw.eq("school_id",schoolId);
-        qw.orderByAsc("specialId");
+        qw.orderByAsc("special_id");
         List<SchoolSpecials> list=schoolSpecialsService.list(qw);
         return ResponseDTO.success(list);
     }

@@ -23,14 +23,24 @@ public class TPersonalDataServiceImpl extends ServiceImpl<TPersonalDataDao, TPer
     @Override
     public TPersonalData saveTPersonalData(TPersonalData tPersonalData) {
         QueryWrapper qw=new QueryWrapper();
-        qw.eq("open_id",tPersonalData.getOpenId());
+        qw.eq("user_id",tPersonalData.getUserId());
         TPersonalData old=this.getOne(qw);
         if(old==null){
             this.save(tPersonalData);
+        }else if(old.getSaveTimes()>2){
+            throw new RuntimeException("修改高考信息次数超过限制");
         }else{
             tPersonalData.setId(old.getId());
             this.updateById(old);
         }
+        return tPersonalData;
+    }
+
+    @Override
+    public TPersonalData getTPersonalDataByUserId(Integer userId) {
+        QueryWrapper qw=new QueryWrapper();
+        qw.eq("user_id",userId);
+        TPersonalData tPersonalData=this.getOne(qw);
         return tPersonalData;
     }
 }
