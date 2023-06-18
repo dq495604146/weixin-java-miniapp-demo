@@ -38,7 +38,7 @@ public class CityController {
     @GetMapping("/getCityByProvince/{provinceId}")
     public ResponseDTO<List<City>> getCityByProvince(@PathVariable("provinceId") String provinceId){
         QueryWrapper qw=new QueryWrapper();
-        qw.orderByAsc("province_id",provinceId);
+        qw.eq("province_id",provinceId);
         List<City> list=cityService.list(qw);
         return ResponseDTO.success(list);
 

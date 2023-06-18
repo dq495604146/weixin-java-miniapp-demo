@@ -23,7 +23,7 @@ public class TPersonalData implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    private String openId;
+    private Integer userId;
 
     /**
      * 分数
@@ -43,7 +43,9 @@ public class TPersonalData implements Serializable {
     /**
      * 科目：文科/理科
      */
-    private String subject;
+    private Integer xuankeId;
 
+   private String xuankeName;
 
+   private Integer saveTimes;
 }
