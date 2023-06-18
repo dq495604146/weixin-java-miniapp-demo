@@ -13,5 +13,7 @@ public class ProvinceVO {
 
     private int hot;
 
+    private int gaokaoType;
+
     private List<City> list;
 }
