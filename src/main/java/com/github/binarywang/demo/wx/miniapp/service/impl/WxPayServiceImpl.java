@@ -5,8 +5,8 @@ import com.github.binarywang.demo.wx.miniapp.entity.OrderEntity;
 import com.github.binarywang.demo.wx.miniapp.entity.WxUserEntity;
 import com.github.binarywang.demo.wx.miniapp.exception.SystemException;
 import com.github.binarywang.demo.wx.miniapp.service.OrderService;
-import com.github.binarywang.demo.wx.miniapp.service.UserService;
 import com.github.binarywang.demo.wx.miniapp.service.WxPayService;
+import com.github.binarywang.demo.wx.miniapp.service.WxUserService;
 import com.github.binarywang.demo.wx.miniapp.utils.WxPayUtil;
 import com.wechat.pay.java.core.exception.HttpException;
 import com.wechat.pay.java.core.exception.MalformedMessageException;
@@ -29,13 +29,13 @@ public class WxPayServiceImpl implements WxPayService {
 
   @Resource WxPayUtil wxPayUtil;
 
-  @Resource UserService userService;
+  @Resource WxUserService wxUserService;
 
   @Resource OrderService orderService;
 
   @Override
   public PrepayWithRequestPaymentResponse prePay(OrderEntity orderEntity) throws SystemException {
-    WxUserEntity wxUserEntity = userService.queryById(orderEntity.getUserId());
+    WxUserEntity wxUserEntity = wxUserService.queryById(orderEntity.getUserId());
     if (wxUserEntity == null) {
       throw SystemException.buildSystemException(ErrorEnum.UserNotFound);
     }
@@ -45,10 +45,10 @@ public class WxPayServiceImpl implements WxPayService {
     prepayRequest.setDescription(orderEntity.getDescription());
     prepayRequest.setNotifyUrl(notifyUrl);
     Amount amount = new Amount();
-    amount.setTotal(orderEntity.getAmount());
+    amount.setTotal(orderEntity.getTotalMoney());
     prepayRequest.setAmount(amount);
     Payer payer = new Payer();
-    payer.setOpenid(wxUserEntity.getOpenid());
+    payer.setOpenid(wxUserEntity.getOpenId());
     prepayRequest.setPayer(payer);
     try {
       PrepayWithRequestPaymentResponse response =

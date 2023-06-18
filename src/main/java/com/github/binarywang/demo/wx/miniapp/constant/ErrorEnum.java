@@ -7,6 +7,7 @@ public enum ErrorEnum {
   UserNotFound(1001, "user not found"),
   NoToken(4001, "no token"),
   NoAccess(4002, "access deny"),
+  JsCodeIsEmpty(4003, "js code empty"),
   PrePayError(2001, "prepay error");
 
   @Getter int code;

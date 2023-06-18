@@ -1,5 +1,8 @@
 package com.github.binarywang.demo.wx.miniapp.utils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import lombok.Getter;
 
 public class PermissionManager {
@@ -21,6 +24,25 @@ public class PermissionManager {
     return (permissionMask & (1 << permission)) != 0;
   }
 
+  public short productIdList2productFlag(List<Integer> productIds) {
+    for (int productId : productIds) {
+      grantPermission(productId);
+    }
+    return permissionMask;
+  }
+
+  public List<Integer> productFlag2productIdList(short num) {
+    List<Integer> onesList = new ArrayList<>();
+
+    for (int i = 0; i < 16; i++) {
+      short mask = (short) (1 << i);
+      if ((num & mask) != 0) {
+        onesList.add(i);
+      }
+    }
+    return onesList;
+  }
+
   public static void main(String[] args) {
     PermissionManager permissionManager = new PermissionManager();
 
@@ -38,5 +60,10 @@ public class PermissionManager {
 
     // 检查权限
     System.out.println("Has permission 1: " + permissionManager.hasPermission(1)); // false
+
+    short code = permissionManager.productIdList2productFlag(Arrays.asList(1, 2));
+    System.out.println("权限码:" + code);
+
+    System.out.println(permissionManager.productFlag2productIdList((short) 6));
   }
 }
