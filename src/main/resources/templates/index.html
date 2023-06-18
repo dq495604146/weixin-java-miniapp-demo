@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function submitForm() {
+            var formData = {
+                phone: $("#phone").val(),
+                product_flag: $("#product_flag").val(),
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "/wx/user/updateByPhone",
+                data: JSON.stringify(formData),
+                contentType: "application/json",
+                success: function (response) {
+                    // 处理成功响应
+                    alert("提交成功");
+                    console.log(response);
+                    clearForm()
+                },
+                error: function (xhr, status, error) {
+                    // 处理错误响应
+                    console.log(error);
+                }
+            });
+        }
+
+        function clearForm() {
+            $("#phone").val("");
+            $("#product_flag").val("");
+        }
+    </script>
+</head>
+<body>
+<form>
+    <div>product_flag说明: VIP: 2; AI: 4; VIP+AI: 6</div>
+    <label for="phone">phone:</label>
+    <input type="text" id="phone" name="phone" required/>
+
+    <label for="product_flag">product_flag:</label>
+    <input type="text" id="product_flag" name="product_flag" required/>
+
+    <button type="button" onclick="submitForm()">Submit</button>
+</form>
+</body>
+</html>

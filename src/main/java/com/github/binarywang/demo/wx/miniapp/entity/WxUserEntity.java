@@ -2,7 +2,9 @@ package com.github.binarywang.demo.wx.miniapp.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
+import java.util.List;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,18 +14,22 @@ import lombok.experimental.Accessors;
 public class WxUserEntity {
   private Integer id;
 
-  private String openid;
+  private String openId;
 
-  private String nickName;
+  private String unionId;
 
-  private String avatarUrl;
-
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date registerDate;
 
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date lastLoginDate;
 
-  private short productFlag;
+  private Short productFlag;
 
-  @TableField(select = false, exist = false)
-  private String code;
+  private String phone;
+
+  private String sessionKey;
+
+  @TableField(exist = false)
+  private List<Integer> productIds;
 }

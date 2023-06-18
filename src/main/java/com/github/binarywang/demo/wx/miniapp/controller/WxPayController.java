@@ -3,7 +3,7 @@ package com.github.binarywang.demo.wx.miniapp.controller;
 import com.github.binarywang.demo.wx.miniapp.entity.OrderEntity;
 import com.github.binarywang.demo.wx.miniapp.entity.WxUserEntity;
 import com.github.binarywang.demo.wx.miniapp.service.OrderService;
-import com.github.binarywang.demo.wx.miniapp.service.UserService;
+import com.github.binarywang.demo.wx.miniapp.service.WxUserService;
 import com.github.binarywang.demo.wx.miniapp.utils.WxPayUtil;
 import com.wechat.pay.java.core.notification.NotificationConfig;
 import com.wechat.pay.java.core.notification.NotificationParser;
@@ -26,7 +26,7 @@ public class WxPayController {
 
   @Resource OrderService orderService;
 
-  @Resource UserService userService;
+  @Resource WxUserService wxUserService;
 
   @PostMapping("/notify")
   public Map<String, String> payNotify(
@@ -53,7 +53,7 @@ public class WxPayController {
       WxUserEntity wxUserEntity = new WxUserEntity();
       wxUserEntity.setId(order.getUserId());
       wxUserEntity.setProductFlag(order.getProductFlag());
-      userService.updateWxUserEntity(wxUserEntity);
+      wxUserService.updateWxUserEntity(wxUserEntity);
     }
     return new HashMap<>();
   }
