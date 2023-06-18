@@ -30,6 +30,8 @@ public class WxUserEntity {
 
   private String sessionKey;
 
+  private int income;
+
   @TableField(exist = false)
   private List<Integer> productIds;
 }
