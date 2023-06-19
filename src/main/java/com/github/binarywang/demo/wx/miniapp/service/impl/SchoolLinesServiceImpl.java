@@ -1,13 +1,16 @@
 package com.github.binarywang.demo.wx.miniapp.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.github.binarywang.demo.wx.miniapp.dao.SpecialScoreLineDao;
 import com.github.binarywang.demo.wx.miniapp.entity.*;
 import com.github.binarywang.demo.wx.miniapp.dao.SchoolLinesDao;
 import com.github.binarywang.demo.wx.miniapp.service.*;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.binarywang.demo.wx.miniapp.vo.SpecialScoreLineVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,8 +37,14 @@ public class SchoolLinesServiceImpl extends ServiceImpl<SchoolLinesDao, SchoolLi
 
     @Autowired
     private IProvinceService provinceService;
+
+    @Autowired
+    private ISpecialScoreLineService specialScoreLineService;
+
+    @Autowired
+    private SpecialScoreLineDao specialScoreLineDao;
     @Override
-    public HashMap<String, Object> getSchoolDetailLinesData(Integer userid, String schoolId) {
+    public HashMap<String, Object> getSchoolDetailLinesData(Integer userid, Integer schoolId) {
 
 //        "schoolscores": [
 //        {
@@ -141,11 +150,26 @@ public class SchoolLinesServiceImpl extends ServiceImpl<SchoolLinesDao, SchoolLi
             }).collect(Collectors.toList());
             resultMap.put("schoolscores",temp1);
         }
-        //TODO 学校专业分数线
-        resultMap.put("majorname","");
+        //学校专业分数线
+        HashMap<String,List<SpecialScoreLineVO>> majorscores=new HashMap<>();
+        List<SpecialScoreLineVO>  specialScoreLineList=specialScoreLineDao.querySchoolSpecialScoreLines(schoolId,provinceId);
 
-
-
+        specialScoreLineList.stream().forEach(specialScoreLineVO -> {
+            if(majorscores.containsKey(specialScoreLineVO.getBranchname())){
+                majorscores.get(specialScoreLineVO.getBranchname()).add(specialScoreLineVO);
+            }else{
+                List<SpecialScoreLineVO> temp=new ArrayList<>();
+                temp.add(specialScoreLineVO);
+                majorscores.put(specialScoreLineVO.getBranchname(),temp);
+            }
+        });
+        List<HashMap<String,Object>> majorscoresResult=majorscores.entrySet().stream().map(entry->{
+            HashMap<String,Object> map=new HashMap<>();
+            map.put("branchname",entry.getKey());
+            map.put("list",entry.getValue());
+            return map;
+        }).collect(Collectors.toList());
+        resultMap.put("majorscores",majorscoresResult);
         return resultMap;
     }
 }

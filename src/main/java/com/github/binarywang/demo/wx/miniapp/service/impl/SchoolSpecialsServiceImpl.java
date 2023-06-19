@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 学校专业信息 服务实现类
+ *  服务实现类
  * </p>
  *
  * @author dingqiang
- * @since 2023-06-14
+ * @since 2023-06-18
  */
 @Service
 public class SchoolSpecialsServiceImpl extends ServiceImpl<SchoolSpecialsDao, SchoolSpecials> implements ISchoolSpecialsService {

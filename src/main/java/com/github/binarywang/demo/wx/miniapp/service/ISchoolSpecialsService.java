@@ -5,11 +5,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
  * <p>
- * 学校专业信息 服务类
+ *  服务类
  * </p>
  *
  * @author dingqiang
- * @since 2023-06-14
+ * @since 2023-06-18
  */
 public interface ISchoolSpecialsService extends IService<SchoolSpecials> {
 

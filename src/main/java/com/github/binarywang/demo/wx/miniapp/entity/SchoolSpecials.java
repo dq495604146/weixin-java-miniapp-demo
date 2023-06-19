@@ -6,11 +6,11 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 学校专业信息
+ * 
  * </p>
  *
  * @author dingqiang
- * @since 2023-06-14
+ * @since 2023-06-18
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -18,25 +18,23 @@ public class SchoolSpecials implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private Integer schoolId;
+    private Long schoolId;
 
-    private Integer specialId;
+    private String specialName;
 
-    private Integer batchId;
+    private Long specialId;
 
-    private Integer wenlikeId;
+    private String rankNum;
 
-    private String specialExtra;
-
-    private Integer rankNum;
-
-    private Double rankPct;
+    private String rankPct;
 
     private String evalLevel;
 
     private String limitYear;
 
-    private Integer nationFeature;
+    private Long nationFeature;
+
+    private String specialClassName;
 
 
 }

@@ -21,5 +21,5 @@ public interface ISchoolLinesService extends IService<SchoolLines> {
      * @param schoolId 学校id
      * @return
      */
-    HashMap<String, Object> getSchoolDetailLinesData(Integer userid, String schoolId);
+    HashMap<String, Object> getSchoolDetailLinesData(Integer userid, Integer schoolId);
 }

@@ -32,7 +32,7 @@ public class SchoolLinesController {
      * @return
      */
     @GetMapping("/getSpecialsList/{schoolId}")
-    public ResponseDTO<HashMap<String,Object>> getSchoolDetailLinesData(@RequestHeader(value = "token") String token, @PathVariable("schoolId") String schoolId){
+    public ResponseDTO<HashMap<String,Object>> getSchoolDetailLinesData(@RequestHeader(value = "token") String token, @PathVariable("schoolId") Integer schoolId){
         Claims claims = JwtUtil.validateToken(token).getClaims();
         Integer userId = Integer.parseInt(claims.getId());
         HashMap<String,Object> list=schoolLinesService.getSchoolDetailLinesData(userId,schoolId);
