@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 学校专业录取分数表 前端控制器
+ *  前端控制器
  * </p>
  *
  * @author dingqiang
- * @since 2023-06-14
+ * @since 2023-06-19
  */
 @RestController
 @RequestMapping("/specialScoreLine")

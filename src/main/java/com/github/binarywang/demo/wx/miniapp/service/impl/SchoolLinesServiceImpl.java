@@ -1,5 +1,8 @@
 package com.github.binarywang.demo.wx.miniapp.service.impl;
 
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.github.binarywang.demo.wx.miniapp.dao.SpecialScoreLineDao;
 import com.github.binarywang.demo.wx.miniapp.entity.*;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +46,9 @@ public class SchoolLinesServiceImpl extends ServiceImpl<SchoolLinesDao, SchoolLi
     private ISpecialScoreLineService specialScoreLineService;
 
     @Autowired
-    private SpecialScoreLineDao specialScoreLineDao;
+    private ISpecialsService specialService;
+
+
     @Override
     public HashMap<String, Object> getSchoolDetailLinesData(Integer userid, Integer schoolId) {
 
@@ -152,9 +158,41 @@ public class SchoolLinesServiceImpl extends ServiceImpl<SchoolLinesDao, SchoolLi
         }
         //学校专业分数线
         HashMap<String,List<SpecialScoreLineVO>> majorscores=new HashMap<>();
-        List<SpecialScoreLineVO>  specialScoreLineList=specialScoreLineDao.querySchoolSpecialScoreLines(schoolId,provinceId);
+        List<SpecialScoreLine>  specialScoreLineList=specialScoreLineService.list(qw);
+        //以二级专业分类分组需查询special专业表
+        Set<Integer> specialIdList=specialScoreLineList.stream().map(SpecialScoreLine::getSpecialId).collect(Collectors.toSet());
+        QueryWrapper specialQw=new QueryWrapper();
+        specialQw.in("special_id",specialIdList);
+        List<Specials> specialsList=specialService.list(specialQw);
+        HashMap<Integer,String> specialMap=new HashMap<>();
+        specialsList.stream().forEach(specials -> {
+            specialMap.put(Integer.valueOf(specials.getSpecialId()),specials.getSpecialClassName());
+        });
 
-        specialScoreLineList.stream().forEach(specialScoreLineVO -> {
+        //转换分组
+        specialScoreLineList.stream().forEach(specialScoreLine -> {
+
+            SpecialScoreLineVO specialScoreLineVO=new SpecialScoreLineVO();
+
+            String branchName=specialMap.get(specialScoreLine.getSpecialId());
+            if(StrUtil.isEmpty(branchName)){
+                branchName=specialScoreLine.getSpecialName();
+            }
+
+            //分组名称
+            specialScoreLineVO.setBranchname(branchName);
+
+            specialScoreLineVO.setSchoolId(specialScoreLine.getSchoolId());
+            specialScoreLineVO.setSpecialId(specialScoreLine.getSpecialId());
+            specialScoreLineVO.setMajorname(specialScoreLine.getSpecialName());
+            specialScoreLineVO.setDescribe(specialScoreLine.getBatchName());
+            specialScoreLineVO.setRequirement(specialScoreLine.getCourses());
+            JSONArray lines=JSONObject.parseArray(specialScoreLine.getLines());
+            if(lines!=null && lines.size()>0){
+                specialScoreLineVO.setMinnum(lines.getJSONObject(0).getInteger("score"));
+                specialScoreLineVO.setYear(lines.getJSONObject(0).getInteger("year"));
+                specialScoreLineVO.setMinrank(lines.getJSONObject(0).getInteger("rank"));
+            }
             if(majorscores.containsKey(specialScoreLineVO.getBranchname())){
                 majorscores.get(specialScoreLineVO.getBranchname()).add(specialScoreLineVO);
             }else{

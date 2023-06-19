@@ -6,11 +6,11 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 学校专业录取分数表
+ *
  * </p>
  *
  * @author dingqiang
- * @since 2023-06-14
+ * @since 2023-06-19
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -18,15 +18,27 @@ public class SpecialScoreLine implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    private Integer provinceId;
+
     private Integer schoolId;
+
+    private Integer date;
+
+    private String courses;
+
+    private String batchName;
+
+    private Integer batchId;
 
     private Integer specialId;
 
-    private Integer year;
+    private Integer coursesId;
 
-    private Double score;
+    private Integer xuekeId;
 
-    private Integer rank;
+    private String specialName;
+
+    private String lines;
 
 
 }

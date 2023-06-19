@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 /**
  * <p>
- * 学校专业录取分数表 服务实现类
+ *  服务实现类
  * </p>
  *
  * @author dingqiang
- * @since 2023-06-14
+ * @since 2023-06-19
  */
 @Service
 public class SpecialScoreLineServiceImpl extends ServiceImpl<SpecialScoreLineDao, SpecialScoreLine> implements ISpecialScoreLineService {
