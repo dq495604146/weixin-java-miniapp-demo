@@ -3,7 +3,6 @@ package com.github.binarywang.demo.wx.miniapp.utils;
 import com.wechat.pay.java.core.Config;
 import com.wechat.pay.java.core.RSAAutoCertificateConfig;
 import com.wechat.pay.java.service.payments.jsapi.JsapiServiceExtension;
-import javax.annotation.PostConstruct;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -27,7 +26,8 @@ public class WxPayUtil {
 
   @Getter private JsapiServiceExtension jsapiServiceExtension;
 
-  @PostConstruct
+  // TODO 有了相关参数再放开下面的注解
+  //  @PostConstruct
   public void init() {
     // 初始化商户配置
     config =
