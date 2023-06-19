@@ -2,18 +2,18 @@ package com.github.binarywang.demo.wx.miniapp.controller;
 
 import com.github.binarywang.demo.wx.miniapp.entity.IncomeEntity;
 import com.github.binarywang.demo.wx.miniapp.entity.OrderEntity;
+import com.github.binarywang.demo.wx.miniapp.entity.ShareIncomeConfigEntity;
 import com.github.binarywang.demo.wx.miniapp.entity.WxUserEntity;
 import com.github.binarywang.demo.wx.miniapp.service.IncomeService;
 import com.github.binarywang.demo.wx.miniapp.service.OrderService;
+import com.github.binarywang.demo.wx.miniapp.service.ShareIncomeConfigService;
 import com.github.binarywang.demo.wx.miniapp.service.WxUserService;
 import com.github.binarywang.demo.wx.miniapp.utils.WxPayUtil;
 import com.wechat.pay.java.core.notification.NotificationConfig;
 import com.wechat.pay.java.core.notification.NotificationParser;
 import com.wechat.pay.java.core.notification.RequestParam;
 import com.wechat.pay.java.service.payments.model.Transaction;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import javax.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +33,7 @@ public class WxPayController {
 
   @Resource IncomeService incomeService;
 
-  // todo 计算收益
-  public static final int MONEY = 1;
+  @Resource ShareIncomeConfigService shareIncomeConfigService;
 
   @PostMapping("/notify")
   public Map<String, String> payNotify(
@@ -67,18 +66,34 @@ public class WxPayController {
       int shareUserId = order.getShareUserId();
       if (shareUserId != 0) {
         // 写income表
+        int shareNumber = incomeService.getShareNumber(shareUserId);
+        // 根据收益规则计算收益
+        int income = computeIncome(shareNumber + 1);
         incomeService.save(
             new IncomeEntity()
                 .setUserId(shareUserId)
-                .setAmount(MONEY)
+                .setAmount(income)
                 .setOrderId(order.getId())
                 .setCreateTime(new Date())
                 .setSharedUserId(order.getUserId()));
         // 分享者收益更新
         WxUserEntity shareUser = wxUserService.queryById(shareUserId);
-        wxUserService.updateWxUserEntity(shareUser.setIncome(shareUser.getIncome() + MONEY));
+        wxUserService.updateWxUserEntity(shareUser.setIncome(shareUser.getIncome() + income));
       }
     }
     return new HashMap<>();
+  }
+
+  private int computeIncome(int count) {
+    if (count < 1) {
+      return 0;
+    }
+    List<ShareIncomeConfigEntity> shareConfig = shareIncomeConfigService.list();
+    ShareIncomeConfigEntity shareIncomeConfigEntity =
+        shareConfig.stream()
+            .filter(config -> count >= config.getMinCount() && count <= config.getMaxCount())
+            .findFirst()
+            .get();
+    return shareIncomeConfigEntity.getIncomeAmount();
   }
 }
