@@ -7,11 +7,11 @@ import com.github.binarywang.demo.wx.miniapp.service.WxPayService;
 import com.github.binarywang.demo.wx.miniapp.utils.PermissionManager;
 import com.wechat.pay.java.service.payments.jsapi.model.PrepayWithRequestPaymentResponse;
 import java.util.Date;
-import java.util.List;
 import javax.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,21 +23,16 @@ public class OrderController {
 
   @Resource WxPayService wxPayService;
 
-  @GetMapping("/create")
-  public PrepayWithRequestPaymentResponse createOrder(
-      int userId, List<Integer> productIds, int amount) throws SystemException {
-    OrderEntity orderEntity = new OrderEntity();
+  @PostMapping("/create")
+  public PrepayWithRequestPaymentResponse createOrder(@RequestBody OrderEntity orderEntity)
+      throws SystemException {
     orderEntity.setOrderStatus((short) 0);
-    orderEntity.setDescription("pay test");
-    orderEntity.setAmount(amount);
     orderEntity.setCreateTime(new Date());
-    orderEntity.setUserId(userId);
     orderEntity.setOutTradeNo(UUID.randomUUID().toString().replace("-", ""));
     PermissionManager permissionManager = new PermissionManager();
-    for (int productId : productIds) {
-      permissionManager.grantPermission(productId);
-    }
-    orderEntity.setProductFlag(permissionManager.getPermissionMask());
+    orderEntity.setProductFlag(
+        permissionManager.productIdList2productFlag(orderEntity.getProductIds()));
+    log.info("create order {}", orderEntity);
     return wxPayService.prePay(orderEntity);
   }
 }
