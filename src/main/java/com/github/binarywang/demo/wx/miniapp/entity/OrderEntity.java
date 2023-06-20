@@ -20,6 +20,7 @@ public class OrderEntity {
   private String outTradeNo;
   private String description;
   private short productFlag;
+  private int shareUserId;
 
   @TableField(exist = false)
   private List<Integer> productIds;

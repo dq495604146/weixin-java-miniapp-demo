@@ -11,6 +11,7 @@ import com.github.binarywang.demo.wx.miniapp.service.WxUserService;
 import com.github.binarywang.demo.wx.miniapp.utils.CommonUtil;
 import com.github.binarywang.demo.wx.miniapp.utils.JwtUtil;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -81,5 +82,10 @@ public class WxUserServiceImpl extends ServiceImpl<UserDao, WxUserEntity> implem
     }
     return update(
         wxUserEntity, new QueryWrapper<>(new WxUserEntity().setPhone(wxUserEntity.getPhone())));
+  }
+
+  @Override
+  public List<WxUserEntity> queryByUserIds(List<Integer> userIds) {
+    return list(new QueryWrapper<WxUserEntity>().in("id", userIds));
   }
 }

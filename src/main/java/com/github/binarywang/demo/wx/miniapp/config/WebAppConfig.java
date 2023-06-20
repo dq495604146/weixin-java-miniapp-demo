@@ -18,7 +18,7 @@ public class WebAppConfig implements WebMvcConfigurer {
 
   @Override
   public void addInterceptors(InterceptorRegistry registry) {
-    String[] patterns = new String[] {"/user/login", "/error"};
+    String[] patterns = new String[] {"/user/login", "/error", "/wx/pay/notify"};
     registry.addInterceptor(jwtInterceptor()).excludePathPatterns(patterns);
   }
 }
