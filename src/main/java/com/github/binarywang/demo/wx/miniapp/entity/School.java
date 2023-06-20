@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author dingqiang
@@ -76,11 +76,5 @@ public class School implements Serializable {
     private String addtion;
 
     private String featuresInner;
-
-    /**
-     * 录取批次id
-     */
-    private Integer batchId;
-
 
 }

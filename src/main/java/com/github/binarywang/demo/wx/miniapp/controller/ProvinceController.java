@@ -36,7 +36,7 @@ public class ProvinceController {
     @GetMapping("/getAllProvince")
     public ResponseDTO<List<Province>> getAllProvince(){
         QueryWrapper qw=new QueryWrapper();
-        qw.orderByAsc("id");
+        qw.orderByAsc("province_id");
         List<Province> list=provinceService.list(qw);
         return ResponseDTO.success(list);
 

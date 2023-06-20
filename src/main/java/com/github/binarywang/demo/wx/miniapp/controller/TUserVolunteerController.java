@@ -43,8 +43,8 @@ public class TUserVolunteerController {
      * 删除志愿
      * @return
      */
-    @DeleteMapping ("/deleteVolunteer/${volunteerId}")
-    public ResponseDTO<Boolean> deleteVolunteer(@PathVariable("userId") Integer volunteerId, @RequestHeader(value = "token") String token){
+    @DeleteMapping ("/deleteVolunteer/{volunteerId}")
+    public ResponseDTO<Boolean> deleteVolunteer(@PathVariable("volunteerId") Integer volunteerId, @RequestHeader(value = "token") String token){
         Claims claims = JwtUtil.validateToken(token).getClaims();
         boolean result=tUserVolunteerService.removeById(volunteerId);
         return ResponseDTO.success(result);
